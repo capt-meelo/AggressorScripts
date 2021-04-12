@@ -1,0 +1,101 @@
+# Seatbelt Aggressor Script 
+# Version: 1.0
+# Author: @captmeelo
+# Blog: https://captmeelo.com/
+# GitHub: https://github.com/capt-meelo
+
+# Location of Seatbelt binary
+$assembly = "C:\\tools\\SharpCollection\\NetFramework_4.0_x64\\Seatbelt.exe";
+
+popup beacon_bottom {
+    menu "Seatbelt" {
+		item "Run Command Groups" {
+			runCommandGroups($1);
+		}
+		item "Run Command Arguments" {
+			runCommandArguments($1);
+		}
+		item "Remote Enumeration" {
+			runRemoteEnum($1);
+		}
+    }
+}
+
+sub runCommandGroups {	
+	$bid = $1;
+	
+	$dialog = dialog("Seatbelt", %(outputfile => "C:\\Windows\\Temp\\out.txt"), lambda({
+			$group = $3["group"];
+			
+			if ($3["outputfile"] ne $null) {
+				$outputfile = $3["outputfile"];
+				$outputfile = "-outputfile=\"$outputfile\"";
+			} else {
+				$outputfile = "";
+			}
+			
+			bexecute_assembly($bid, $assembly, "-group=$group -full $outputfile");
+		})
+	);
+	
+	dialog_description($dialog, "Run Seatbelt using the default command groups. Output file can either be \".txt\" or \".json\".");
+	drow_combobox($dialog, "group", "Group:", @("All", "User", "System", "Slack", "Chromium", "Misc"));
+	drow_text($dialog, "outputfile", "Output File: ");
+	dbutton_action($dialog, "Run");
+	dbutton_help($dialog, "https://github.com/GhostPack/Seatbelt");
+	dialog_show($dialog);
+}
+
+sub runCommandArguments {	
+	$bid = $1;
+	
+	$dialog = dialog("Seatbelt", %(arguments => "LogonEvents 30", outputfile => "C:\\Windows\\Temp\\out.txt"), lambda({
+			$arguments = $3["arguments"];
+			
+			if ($3["outputfile"] ne $null) {
+				$outputfile = $3["outputfile"];
+				$outputfile = "-outputfile=\"$outputfile\"";
+			} else {
+				$outputfile = "";
+			}
+			
+			bexecute_assembly($bid, $assembly, "\"$arguments\" -full $outputfile");
+		})
+	);
+	
+	dialog_description($dialog, "Run Seatbelt by passing arguments. Output file can either be \".txt\" or \".json\".");
+	drow_text($dialog, "arguments", "Command Arguments: ");
+	drow_text($dialog, "outputfile", "Output File: ");
+	dbutton_action($dialog, "Run");
+	dbutton_help($dialog, "https://github.com/GhostPack/Seatbelt");
+	dialog_show($dialog);
+}
+
+sub runRemoteEnum {
+	$bid = $1;
+	
+	$dialog = dialog("Seatbelt", %(outputfile => "C:\\Windows\\Temp\\out.txt"), lambda({
+			$computername = $3["computername"];
+			$username = $3["username"];
+			$password = $3["password"];
+			
+			if ($3["outputfile"] ne $null) {
+				$outputfile = $3["outputfile"];
+				$outputfile = "-outputfile=\"$outputfile\"";
+			} else {
+				$outputfile = "";
+			}
+			
+			bexecute_assembly($bid, $assembly, "-group=remote -computername=$computername -username=$username -password=\"$password\" -full $outputfile");
+		})
+	);
+	
+	dialog_description($dialog, "Run Seatbelt against a remote system. Output file can either be \".txt\" or \".json\".");
+	drow_text($dialog, "computername", "Remote System (FQDN/IP): ");
+	drow_text($dialog, "username", "Username (Domain\\User): ");
+	drow_text($dialog, "password", "Password: ");
+	drow_text($dialog, "outputfile", "Output File: ");
+	dbutton_action($dialog, "Run");
+	dbutton_help($dialog, "https://github.com/GhostPack/Seatbelt");
+	dialog_show($dialog);
+}
