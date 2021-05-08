@@ -36,7 +36,7 @@ Collection of scripts that I created to make my life easier since I'm not good a
 
 - Generate golden, silver, and trust tickets from the GUI. The created tickets are then injected into the current session.
 - The default settings are:
-  - It uses the `/endin:600 /renewmax:10080` arguments to set the ticket lifetime and the maximum lifetime that a ticket can be renewed.
+  - It uses the `/endin:600` and `/renewmax:10080` arguments to set the ticket lifetime and the maximum lifetime that a ticket can be renewed.
 
 **Screenshots**
 
