@@ -30,3 +30,16 @@ Collection of scripts that I created to make my life easier since I'm not good a
 **Screenshots**
 
 ![sharphound.png](./screenshots/sharphound.png "Running SharpHound")
+---
+
+### CreateTicket.cna
+
+- Generate golden, silver, and trust tickets from the GUI. The created tickets are then injected into the current session.
+- The default settings are:
+  - It uses the `/endin:600 /renewmax:10080` arguments to set the ticket lifetime and the maximum lifetime that a ticket can be renewed.
+
+**Screenshots**
+
+![createticket.png](./screenshots/createticket.png "CreateTicket Menu") ![createticket-golden.png](./screenshots/createticket-golden.png "Creating Golden Ticket ") 
+
+![createticket-silver.png](./screenshots/createticket-silver.png "Creating Silver Ticket ") ![createticket-trust.png](./screenshots/createticket-trust.png "Creating Trust Ticket ")

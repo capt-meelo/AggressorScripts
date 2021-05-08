@@ -1,5 +1,4 @@
 # Seatbelt Aggressor Script 
-# Version: 1.0
 # Author: @captmeelo
 # Blog: https://captmeelo.com/
 # GitHub: https://github.com/capt-meelo
@@ -34,7 +33,9 @@ sub runCommandGroups {
 				$outputfile = "";
 			}
 			
-			bexecute_assembly($bid, $assembly, "-group=$group -full $outputfile");
+			$command = "-group=$group -full $outputfile";
+			binput($bid, "execute-assembly $assembly $command");
+			bexecute_assembly($bid, $assembly, $command);
 		})
 	);
 	
@@ -42,7 +43,7 @@ sub runCommandGroups {
 	drow_combobox($dialog, "group", "Group:", @("All", "User", "System", "Slack", "Chromium", "Misc"));
 	drow_text($dialog, "outputfile", "Output File: ");
 	dbutton_action($dialog, "Run");
-	dbutton_help($dialog, "https://github.com/GhostPack/Seatbelt");
+	dbutton_help($dialog, "https://github.com/GhostPack/Seatbelt/blob/master/README.md#command-groups");
 	dialog_show($dialog);
 }
 
@@ -59,7 +60,9 @@ sub runCommandArguments {
 				$outputfile = "";
 			}
 			
-			bexecute_assembly($bid, $assembly, "\"$arguments\" -full $outputfile");
+			$command = "\"$arguments\" -full $outputfile";
+			binput($bid, "execute-assembly $assembly $command");
+			bexecute_assembly($bid, $assembly, $command);
 		})
 	);
 	
@@ -67,7 +70,7 @@ sub runCommandArguments {
 	drow_text($dialog, "arguments", "Command Arguments: ");
 	drow_text($dialog, "outputfile", "Output File: ");
 	dbutton_action($dialog, "Run");
-	dbutton_help($dialog, "https://github.com/GhostPack/Seatbelt");
+	dbutton_help($dialog, "https://github.com/GhostPack/Seatbelt/blob/master/README.md#command-arguments");
 	dialog_show($dialog);
 }
 
@@ -86,7 +89,9 @@ sub runRemoteEnum {
 				$outputfile = "";
 			}
 			
-			bexecute_assembly($bid, $assembly, "-group=remote -computername=$computername -username=$username -password=\"$password\" -full $outputfile");
+			$command = "-group=remote -computername=$computername -username=$username -password=\"$password\" -full $outputfile";
+			binput($bid, "execute-assembly $assembly $command");
+			bexecute_assembly($bid, $assembly, $command);
 		})
 	);
 	
@@ -96,6 +101,6 @@ sub runRemoteEnum {
 	drow_text($dialog, "password", "Password: ");
 	drow_text($dialog, "outputfile", "Output File: ");
 	dbutton_action($dialog, "Run");
-	dbutton_help($dialog, "https://github.com/GhostPack/Seatbelt");
+	dbutton_help($dialog, "https://github.com/GhostPack/Seatbelt/blob/master/README.md#remote-enumeration");
 	dialog_show($dialog);
 }
