@@ -10,9 +10,13 @@ Collection of scripts that I created to make my life easier since I'm not good a
 
 **Screenshots**
 
-![createticket.png](./screenshots/createticket.png "CreateTicket Menu") ![createticket-golden.png](./screenshots/createticket-golden.png "Creating Golden Ticket ") 
+![createticket.png](./screenshots/createticket.png "CreateTicket Menu") 
 
-![createticket-silver.png](./screenshots/createticket-silver.png "Creating Silver Ticket ") ![createticket-trust.png](./screenshots/createticket-trust.png "Creating Trust Ticket ")
+![createticket-golden.png](./screenshots/createticket-golden.png "Creating Golden Ticket ") 
+
+![createticket-silver.png](./screenshots/createticket-silver.png "Creating Silver Ticket ") 
+
+![createticket-trust.png](./screenshots/createticket-trust.png "Creating Trust Ticket ")
 ---
 
 ### Seatbelt.cna
